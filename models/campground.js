@@ -1,11 +1,20 @@
+const { string } = require("joi");
 const mongoose = require("mongoose");
 const Review = require("./review");
 const User = require("./user");
 const Schema = mongoose.Schema; //shortcut for the many times mongoose.Schema will be called
 
+const ImageSchema = new Schema({
+  url: String,
+  filename: String,
+});
+ImageSchema.virtual("thumbnail").get(function () {
+  return this.url.replace("/upload", "/upload/w_200");
+});
+
 const CampgroundSchema = new Schema({
   title: String,
-  image: String,
+  images: [ImageSchema],
   price: Number,
   description: String,
   location: String,

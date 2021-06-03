@@ -19,12 +19,12 @@ const {
 router
   .route("/")
   .get(catchAsync(campgrounds.index))
-  .post(upload.single("image"), (req, res) => {});
-// .post(
-//   isLoggedIn,
-//   validateCampground,
-//   catchAsync(campgrounds.createCampground)
-// );
+  .post(
+    isLoggedIn,
+    upload.array("image"),
+    validateCampground,
+    catchAsync(campgrounds.createCampground)
+  );
 router.get("/new", isLoggedIn, campgrounds.renderNewForm);
 
 router
@@ -33,6 +33,7 @@ router
   .put(
     isLoggedIn,
     isAuthor,
+    upload.array("image"),
     validateCampground,
     catchAsync(campgrounds.updateCampground)
   )
