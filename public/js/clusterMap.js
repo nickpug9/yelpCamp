@@ -1,9 +1,12 @@
 mapboxgl.accessToken = mapToken;
+console.log(screen.width);
+const zoom = 3;
+
 const map = new mapboxgl.Map({
   container: "cluster-map",
   style: "mapbox://styles/mapbox/dark-v10",
   center: [-103.59179687498357, 40.66995747013945],
-  zoom: 3,
+  zoom,
 });
 
 map.addControl(new mapboxgl.NavigationControl());
@@ -97,6 +100,11 @@ map.on("load", function () {
     const popupMarkup = e.features[0].properties.popupMarkup;
     const coordinates = e.features[0].geometry.coordinates.slice();
 
+    map.flyTo({
+      center: e.features[0].geometry.coordinates,
+      zoom: 9,
+    });
+
     // Ensure that if the map is zoomed out such that
     // multiple copies of the feature are visible, the
     // popup appears over the copy being pointed to.
@@ -114,3 +122,15 @@ map.on("load", function () {
     map.getCanvas().style.cursor = "";
   });
 });
+if (screen.width < 768) {
+  map.setZoom(2);
+}
+window.onresize = function () {
+  console.log("resize");
+  if (screen.width < 768) {
+    map.setZoom(2);
+    console.log("small");
+  } else {
+    map.setZoom(3);
+  }
+};
